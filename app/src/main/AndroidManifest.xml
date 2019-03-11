@@ -3,6 +3,7 @@
           package="com.andalus.broadcastreceiversplayground">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
             android:allowBackup="true"
@@ -19,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".PhoneReceiver">
+        <receiver android:name=".BroadcastReceivers.PhoneReceiver">
             <intent-filter >
                 <action android:name="android.intent.action.PHONE_STATE"/>
             </intent-filter>
