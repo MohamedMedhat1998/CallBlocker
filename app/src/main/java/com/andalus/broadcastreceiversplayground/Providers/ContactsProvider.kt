@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.andalus.broadcastreceiversplayground.Data.ContactObject
+import java.util.*
 
 class ContactsProvider {
 
@@ -48,6 +49,7 @@ fun Cursor.toContactsList(): MutableList<ContactObject> {
     while (this.moveToNext()) {
         contactsList.add(
             ContactObject(
+                Calendar.getInstance().timeInMillis,
                 this.getString(0),
                 this.getString(1)
             )
