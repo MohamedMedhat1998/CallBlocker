@@ -1,20 +1,20 @@
-package com.andalus.broadcastreceiversplayground.Providers
+package com.andalus.broadcastreceiversplayground.Repositories
 
 import android.content.Context
 import android.database.Cursor
 import android.os.AsyncTask
 import android.provider.ContactsContract
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.andalus.broadcastreceiversplayground.Data.ContactObject
+import com.andalus.broadcastreceiversplayground.Objects.Contact
+import com.andalus.broadcastreceiversplayground.Objects.NormalContact
 import java.util.*
 
 class ContactsProvider {
 
     companion object {
-        private val globalContactsList = MutableLiveData<MutableList<ContactObject>>()
-        fun getContactsList(context: Context): LiveData<MutableList<ContactObject>> {
+        private val globalContactsList = MutableLiveData<MutableList<NormalContact>>()
+        fun getContactsList(context: Context): LiveData<MutableList<NormalContact>> {
             ContactsAsyncTask().execute(context)
             return globalContactsList
         }
@@ -39,16 +39,16 @@ class ContactsProvider {
 
         override fun onPostExecute(result: Cursor?) {
             super.onPostExecute(result)
-            globalContactsList.value = result?.toContactsList()
+            globalContactsList.value = result?.toContactsList() ?: mutableListOf()
         }
     }
 }
 
-fun Cursor.toContactsList(): MutableList<ContactObject> {
-    val contactsList = mutableListOf<ContactObject>()
+fun Cursor.toContactsList(): MutableList<NormalContact> {
+    val contactsList = mutableListOf<NormalContact>()
     while (this.moveToNext()) {
         contactsList.add(
-            ContactObject(
+            NormalContact(
                 Calendar.getInstance().timeInMillis,
                 this.getString(0),
                 this.getString(1)
