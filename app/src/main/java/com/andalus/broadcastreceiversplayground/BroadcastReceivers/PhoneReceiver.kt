@@ -5,8 +5,10 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
+import com.andalus.broadcastreceiversplayground.Objects.BlockedContact
 import com.andalus.broadcastreceiversplayground.Utils.CallBlocker
 import com.andalus.broadcastreceiversplayground.Utils.Constants
+import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
 
 class PhoneReceiver : BroadcastReceiver() {
 
@@ -27,14 +29,19 @@ class PhoneReceiver : BroadcastReceiver() {
                 if ((state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_RINGING) || (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_OFFHOOK)) {
                     context?.startActivity(Intent(Constants.BLOCK_DIALOG_ACTION))
                 } else if (state == TelephonyManager.EXTRA_STATE_RINGING) {
-                    CallBlocker.startProcessing(
-                        application = context?.applicationContext as Application,
-                        incomingNumber = incomingNumber
+                    takeAction(
+                        CallBlocker<BlockedContact>(),
+                        context?.applicationContext as Application,
+                        incomingNumber
                     )
                 }
                 LAST_STATE = state
             }
 
         }
+    }
+
+    private fun <T> takeAction(processor: Processor<T>, application: Application, number: String?) {
+        processor.startProcessing(application, number)
     }
 }

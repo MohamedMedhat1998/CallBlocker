@@ -17,6 +17,9 @@ interface BlockedContactsDao {
     fun insertAllContacts(vararg contacts: BlockedContact)
 
     @Query("SELECT * FROM BlockedContact")
-    fun loadAll(): LiveData<List<BlockedContact>>
+    fun loadLiveData(): LiveData<List<BlockedContact>>
+
+    @Query("SELECT * FROM BlockedContact")
+    fun loadAll(): List<BlockedContact>
 
 }
