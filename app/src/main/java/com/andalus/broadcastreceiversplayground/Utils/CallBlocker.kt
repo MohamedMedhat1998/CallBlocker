@@ -4,15 +4,14 @@ import android.app.Application
 import android.content.Context
 import com.andalus.broadcastreceiversplayground.DatabaseOperations.QueryAllOperation
 import com.andalus.broadcastreceiversplayground.Objects.Contact
-import com.andalus.broadcastreceiversplayground.Repositories.BlockedContactsRepository
 import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
 
 
-class CallBlocker<T> : Processor<T> {
+class CallBlocker<T : Contact>(private val queryAllOperation: QueryAllOperation<T>) : Processor<T> {
 
 
     override fun startProcessing(application: Application, incomingNumber: String?) {
-        takeAction(BlockedContactsRepository(application), application, incomingNumber)
+        takeAction(queryAllOperation, application, incomingNumber)
     }
 
     private fun <Object : Contact> takeAction(

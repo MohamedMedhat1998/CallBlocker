@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
 import com.andalus.broadcastreceiversplayground.Objects.BlockedContact
+import com.andalus.broadcastreceiversplayground.Repositories.BlockedContactsRepository
 import com.andalus.broadcastreceiversplayground.Utils.CallBlocker
 import com.andalus.broadcastreceiversplayground.Utils.Constants
 import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
@@ -30,8 +31,8 @@ class PhoneReceiver : BroadcastReceiver() {
                     context?.startActivity(Intent(Constants.BLOCK_DIALOG_ACTION))
                 } else if (state == TelephonyManager.EXTRA_STATE_RINGING) {
                     takeAction(
-                        CallBlocker<BlockedContact>(),
-                        context?.applicationContext as Application,
+                        CallBlocker(BlockedContactsRepository(context?.applicationContext as Application)),
+                        context.applicationContext as Application,
                         incomingNumber
                     )
                 }
