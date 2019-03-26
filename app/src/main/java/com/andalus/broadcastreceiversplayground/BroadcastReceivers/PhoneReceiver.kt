@@ -7,7 +7,7 @@ import android.content.Intent
 import android.telephony.TelephonyManager
 import com.andalus.broadcastreceiversplayground.Repositories.BlockedContactsRepository
 import com.andalus.broadcastreceiversplayground.Utils.CallBlockerProcessor
-import com.andalus.broadcastreceiversplayground.Utils.DialogProcessor
+import com.andalus.broadcastreceiversplayground.Utils.BlockDialogProcessor
 import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
 
 class PhoneReceiver : BroadcastReceiver() {
@@ -28,11 +28,15 @@ class PhoneReceiver : BroadcastReceiver() {
                 val incomingNumber = bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER)
                 val isRinging = state == TelephonyManager.EXTRA_STATE_RINGING
                 val canViewDialog =
-                    (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_RINGING) || (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_OFFHOOK)
+                    ((state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_RINGING) || (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_OFFHOOK))
 
                 if (canViewDialog) {
 
-                    takeAction(DialogProcessor(), context?.applicationContext as Application, incomingNumber)
+                    takeAction(
+                        BlockDialogProcessor(BlockedContactsRepository(context?.applicationContext as Application)),
+                        context.applicationContext as Application,
+                        incomingNumber
+                    )
 
                 } else if (isRinging) {
 
@@ -43,7 +47,6 @@ class PhoneReceiver : BroadcastReceiver() {
                     )
 
                 }
-
                 LAST_STATE = state
 
             }

@@ -10,9 +10,6 @@ import com.andalus.broadcastreceiversplayground.Objects.Contact
 @Dao
 interface BlockedContactsDao {
 
-    @Query("SELECT * FROM BlockedContact where number like :value")
-    fun getByNumber(value: String?): List<BlockedContact>
-
     @Insert
     fun insertAllContacts(vararg contacts: BlockedContact)
 

@@ -1,7 +1,6 @@
 package com.andalus.broadcastreceiversplayground.Utils
 
 import android.os.AsyncTask
-import com.andalus.broadcastreceiversplayground.Objects.Contact
 
 class ListBackgroundTask<Object>(
     private val task: () -> List<Object>?,
