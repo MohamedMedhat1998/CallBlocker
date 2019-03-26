@@ -15,11 +15,9 @@ class CallBlocker<T : Contact>(private val queryAllOperation: QueryAllOperation<
     }
 
     private fun <Object : Contact> takeAction(
-        query: QueryAllOperation<Object>,
-        application: Application,
-        incomingNumber: String?
+        query: QueryAllOperation<Object>, application: Application, incomingNumber: String?
     ) {
-        return query.getAll {
+        query.getAll {
             if (it != null) {
                 for (item in it) {
                     if (item.contactNumber.contains(incomingNumber.toString(), true) ||
