@@ -7,7 +7,7 @@ import com.andalus.broadcastreceiversplayground.Objects.Contact
 import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
 
 
-class CallBlocker<T : Contact>(private val queryAllOperation: QueryAllOperation<T>) : Processor<T> {
+class CallBlockerProcessor<T : Contact>(private val queryAllOperation: QueryAllOperation<T>) : Processor {
 
 
     override fun startProcessing(application: Application, incomingNumber: String?) {

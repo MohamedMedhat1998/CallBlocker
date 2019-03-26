@@ -5,10 +5,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.telephony.TelephonyManager
-import com.andalus.broadcastreceiversplayground.Objects.BlockedContact
 import com.andalus.broadcastreceiversplayground.Repositories.BlockedContactsRepository
-import com.andalus.broadcastreceiversplayground.Utils.CallBlocker
-import com.andalus.broadcastreceiversplayground.Utils.Constants
+import com.andalus.broadcastreceiversplayground.Utils.CallBlockerProcessor
+import com.andalus.broadcastreceiversplayground.Utils.DialogProcessor
 import com.andalus.broadcastreceiversplayground.Utils.Interfaces.Processor
 
 class PhoneReceiver : BroadcastReceiver() {
@@ -24,25 +23,34 @@ class PhoneReceiver : BroadcastReceiver() {
             val bundle = intent.extras
 
             if (bundle != null) {
+
                 val state = bundle.getString(TelephonyManager.EXTRA_STATE)
                 val incomingNumber = bundle.getString(TelephonyManager.EXTRA_INCOMING_NUMBER)
+                val isRinging = state == TelephonyManager.EXTRA_STATE_RINGING
+                val canViewDialog =
+                    (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_RINGING) || (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_OFFHOOK)
 
-                if ((state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_RINGING) || (state == TelephonyManager.EXTRA_STATE_IDLE && LAST_STATE == TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-                    context?.startActivity(Intent(Constants.BLOCK_DIALOG_ACTION))
-                } else if (state == TelephonyManager.EXTRA_STATE_RINGING) {
+                if (canViewDialog) {
+
+                    takeAction(DialogProcessor(), context?.applicationContext as Application, incomingNumber)
+
+                } else if (isRinging) {
+
                     takeAction(
-                        CallBlocker(BlockedContactsRepository(context?.applicationContext as Application)),
+                        CallBlockerProcessor(BlockedContactsRepository(context?.applicationContext as Application)),
                         context.applicationContext as Application,
                         incomingNumber
                     )
-                }
-                LAST_STATE = state
-            }
 
+                }
+
+                LAST_STATE = state
+
+            }
         }
     }
 
-    private fun <T> takeAction(processor: Processor<T>, application: Application, number: String?) {
+    private fun takeAction(processor: Processor, application: Application, number: String?) {
         processor.startProcessing(application, number)
     }
 }
