@@ -9,6 +9,8 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/mainActivityTabLayout"
             android:layout_width="0dp"
+            app:tabSelectedTextColor="@color/white"
+            app:tabTextColor="@color/whiteUnfocused"
             android:layout_height="wrap_content" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"/>
     <androidx.viewpager.widget.ViewPager

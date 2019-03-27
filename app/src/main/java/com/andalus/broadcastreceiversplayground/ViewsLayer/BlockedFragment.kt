@@ -16,7 +16,7 @@ import com.andalus.broadcastreceiversplayground.ViewModelLayer.BlockedContactsVi
 import com.andalus.broadcastreceiversplayground.ViewModelLayer.BlockedContactsViewModelFactory
 import kotlinx.android.synthetic.main.fragment_blocked_contacts.view.*
 
-class BlockedContactsFragment : Fragment() {
+class BlockedFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -19,7 +19,7 @@ import com.andalus.broadcastreceiversplayground.ViewModelLayer.ContactsViewModel
 import kotlinx.android.synthetic.main.fragment_contacts_list.view.*
 import java.util.*
 
-class ContactsListFragment : Fragment() {
+class ContactsFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,20 +38,6 @@ class ContactsListFragment : Fragment() {
             adapter.data = it
             adapter.notifyDataSetChanged()
         })
-
-        val btnAdd = view.btnAdd
-        val etName = view.etName
-        val etNumber = view.etPhone
-
-        btnAdd.setOnClickListener {
-            BlockedContactsRepository(activity?.application!!).insert(
-                BlockedContact(
-                    Calendar.getInstance().timeInMillis,
-                    etName.text.toString(),
-                    etNumber.text.toString()
-                )
-            )
-        }
 
         return view
     }
